@@ -106,11 +106,10 @@ In that file, enter the following:
 import mraa
 import time
 
-# Setup
+
 x = mraa.Gpio(31)
 x.dir(mraa.DIR_OUT)
 
-# Loop
 while True:
     x.write(1)
     time.sleep(0.5)
