@@ -136,9 +136,9 @@ retrieved from https://learn.sparkfun.com/tutorials/installing-libmraa-on-ubilin
 Step 1: Download the latest Raspbian linux image and burn to your SD Card following the instructions on http://elinux.org/RPi_Easy_SD_Card_Setup
 
 If you are using Raspian Linux 3.18 or later you need to go into the raspberry pi config utility and enable I2C.
-
+```
 sudo raspi-config
-
+```
 Select 8 Advanced Options and then  A7 I2C - Enable/Disable automatic loading. A prompt will appear asking Would you like the ARM I2C interface to be enabled?, select Yes, exit the utility and reboot your raspberry pi.
 
 sudo reboot
