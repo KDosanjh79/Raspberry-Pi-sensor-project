@@ -5,15 +5,103 @@ Spyder Editor
 This is a temporary script file.
 """
 
-import mraa;
-import time;
-import math;
-import sys;
+# Simple demo of reading each analog input from the ADS1x15 and printing it to
+# the screen.
+# Author: Tony DiCola
+# License: Public Domain
+import time
+import numpy as np
 
 
-B = 3975
-tempMraa = mraa.I2c(0)
-tempRead = temp.read()
-resistance = (1023-tempRead)*10000.0/tempRead
-temp = 1/(math.log(resistance/10000.0))/B+1/298.15
+# Import the ADS1x15 module.
+import Adafruit_ADS1x15
+
+#import mraa as this is what will be used
+#import mraa
+#int read (uint8_t*data, int length)
+#return mraa.I2c.read(m_i2c, data, length)
+
+
+# Create an ADS1115 ADC (16-bit) instance.
+adc = Adafruit_ADS1x15.ADS1115()
+
+# Or create an ADS1015 ADC (12-bit) instance.
+#adc = Adafruit_ADS1x15.ADS1015()
+
+# Note you can change the I2C address from its default (0x48), and/or the I2C
+# bus by passing in these optional parameters:
+#adc = Adafruit_ADS1x15.ADS1015(address=0x49, busnum=1)
+
+# Choose a gain of 1 for reading voltages from 0 to 4.09V.
+# Or pick a different gain to change the range of voltages that are read:
+#  - 2/3 = +/-6.144V
+#  -   1 = +/-4.096V
+#  -   2 = +/-2.048V
+#  -   4 = +/-1.024V
+#  -   8 = +/-0.512V
+#  -  16 = +/-0.256V
+# See table 3 in the ADS1015/ADS1115 datasheet for more info on gain.
+GAIN = 1
+
+print('Reading ADS1x15 values, press Ctrl-C to quit...')
+# Print nice channel column headers.
+print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*range(4)))
+print('-' * 37)
+# Main loop.
+while True:
+    # Read all the ADC channel values in a list.
+    values = [0]*4
+    for i in range(4):
+        # Read the specified ADC channel using the previously set gain value.
+        values[i] = adc.read_adc(i, gain=GAIN)
+        # Note you can also pass in an optional data_rate parameter that controls
+        # the ADC conversion time (in samples/second). Each chip has a different
+        # set of allowed data rate values, see datasheet Table 9 config register
+        # DR bit values.
+        #values[i] = adc.read_adc(i, gain=GAIN, data_rate=128)
+        # Each value will be a 12 or 16 bit signed integer value depending on the
+        # ADC (ADS1015 = 12-bit, ADS1115 = 16-bit).
+    # Print the ADC values.
+    print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*values))
+    # Pause for half a second.
+    time.sleep(0.5)
+    
+    
+
+
+ThermistorPin = 0;
+Vo = 0
+R1 = 10000 
+logR2 = 0.0 
+R2 = 0.0 
+T = 0.0 
+Tc = 0.0 
+Tf = 0.0
+c1 = 1.009249522e-03 
+c2 = 2.378405444e-04
+c3 = 2.019202697e-07
+
+
+
+while True: 
+
+  Vo = adc.read_adc(0)
+  R2 = R1 * (1023.0 / (Vo - 1.0))
+  logR2 = np.log(R2);
+  T = (1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2));
+  Tc = T - 273.15;
+  Tf = (Tc * 9.0)/ 5.0 + 32.0; 
+
+  print("Temperature: ") 
+  print(Tf)
+  print(" F; ")
+  print(Tc)
+  print(" C") 
+  time.sleep(0.5)
+    
+    
+
+    
+
+
 
