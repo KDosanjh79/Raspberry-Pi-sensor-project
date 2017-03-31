@@ -11,6 +11,7 @@ This is a temporary script file.
 # License: Public Domain
 import time
 import numpy as np
+import LDR
 
 
 # Import the ADS1x15 module.
