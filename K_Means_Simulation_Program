@@ -1,0 +1,64 @@
+#import all the modules
+import matplotlib.pyplot as plt
+from matplotlib import style
+style.use('ggplot')
+from sklearn.cluster import KMeans
+import pandas as pd
+import numpy as np
+
+
+#Open file and read (file contains data from 4 types of sensors)
+data_file = pd.read_csv('simulation_data.csv')
+
+#print the data from file
+print(data_file)
+
+#Apply KMeans 
+Sim_Data = np.array(data_file.astype(int))
+
+kmeans = KMeans(n_clusters=3)
+kmeans.fit(Sim_Data)
+
+centroids = kmeans.cluster_centers_
+labels = kmeans.labels_
+
+print(centroids)
+print(labels)
+
+colors = ["g.", "b.", "r."]
+
+group0=[]
+group1=[]
+group2=[]
+for i in range(len(Sim_Data)):
+    if labels[i]==0:
+        group0.append(Sim_Data[i])
+    elif labels[i]==1:
+        group1.append(Sim_Data[i])
+    else:
+        group2.append(Sim_Data[i])
+print("*************************************")
+print("Group 0:\n", group0);
+print("Group 1:\n", group1);
+print("Group 2:\n", group2);
+print("*************************************")
+
+
+minimum = []
+maximum = []
+average = []
+for j in range(len(group0)):
+    
+    
+    
+
+
+
+
+
+for i in range(len(Sim_Data)):
+#    print("coordinate:",Sim_Data[i], "label:", labels[i])
+    plt.plot(Sim_Data[i][0], Sim_Data[i][1], colors[labels[i]], markersize = 15)
+
+plt.scatter(centroids[:, 0],centroids[:, 1],centroids[:, 2], marker = "x", linewidths = 5, zorder = 10)
+plt.show()
